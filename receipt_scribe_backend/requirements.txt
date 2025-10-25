@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+openai==2.6.1
+libsql-client
+pillow
+python-jose
+passlib
+bcrypt
+aiofiles
