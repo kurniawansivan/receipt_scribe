@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart'; // Add this import
 import '../models/expense.dart';
 import '../models/api_response.dart';
 
@@ -19,10 +21,13 @@ class ApiService {
         Uri.parse('$baseUrl$apiPrefix/upload'),
       );
 
-      // Add image file
+      // Get the MIME type of the file
+      String? mimeType = lookupMimeType(imageFile.path);
+      
       request.files.add(await http.MultipartFile.fromPath(
         'file',
         imageFile.path,
+        contentType: mimeType != null ? MediaType.parse(mimeType) : null,
       ));
 
       var response = await request.send();
@@ -44,6 +49,7 @@ class ApiService {
       );
     }
   }
+// ...existing code...
 
   Future<ApiResponse<ExpenseSummary>> getExpenses() async {
     try {
