@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/expense_provider.dart';
 import '../models/expense.dart';
+import 'expense_detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -194,14 +195,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Text('Items: ${expense.items.length}'),
           ],
         ),
-        trailing: Text(
-          '\$${expense.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '\$${expense.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right, color: Colors.grey),
+          ],
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExpenseDetailScreen(expense: expense),
+            ),
+          );
+        },
       ),
     );
   }
