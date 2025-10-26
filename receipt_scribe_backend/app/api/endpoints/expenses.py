@@ -24,11 +24,11 @@ async def get_expenses():
         )
         
     except Exception as e:
-        logger.error(f"Get expenses error: {str(e)}")
+        logger.error("Get expenses error: %s", str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to fetch expenses"
-        )
+        ) from e
 
 @router.post("/upload", response_model=UploadResponse)
 async def upload_receipt(file: UploadFile = File(...)):
@@ -44,7 +44,7 @@ async def upload_receipt(file: UploadFile = File(...)):
         
         # Read image data
         image_data = await file.read()
-        logger.info(f"Processing image: {file.filename}, size: {len(image_data)} bytes")
+        logger.info("Processing image: %s, size: %s bytes", file.filename, len(image_data))
         
         # Extract data using OpenAI
         extracted_data = await openai_service.extract_expense_data(image_data)
@@ -64,7 +64,7 @@ async def upload_receipt(file: UploadFile = File(...)):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Upload error: {str(e)}")
+        logger.error("Upload error: %s", str(e))
         return UploadResponse(
             success=False,
             error=str(e)

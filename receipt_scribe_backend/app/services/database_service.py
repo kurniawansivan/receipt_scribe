@@ -44,7 +44,7 @@ class DatabaseService:
                 conn.execute(create_table_sql)
             logger.info("Database initialized successfully")
         except Exception as e:
-            logger.error(f"Error initializing database: {str(e)}")
+            logger.error("Error initializing database: %s", str(e))
             raise
 
     def create_expense(self, expense: ExpenseCreate) -> int:
@@ -71,7 +71,7 @@ class DatabaseService:
                 )
                 return cursor.lastrowid
         except Exception as e:
-            logger.error(f"Error creating expense: {str(e)}")
+            logger.error("Error creating expense: %s", str(e))
             raise
 
     def get_all_expenses(self) -> List[ExpenseResponse]:
@@ -102,7 +102,7 @@ class DatabaseService:
                     expenses.append(expense)
                 return expenses
         except Exception as e:
-            logger.error(f"Error getting expenses: {str(e)}")
+            logger.error("Error getting expenses: %s", str(e))
             return []
 
     def get_expense_summary(self) -> dict:
@@ -127,7 +127,7 @@ class DatabaseService:
                     "total_tax": row['total_tax'] or 0.0
                 }
         except Exception as e:
-            logger.error(f"Error getting summary: {str(e)}")
+            logger.error("Error getting summary: %s", str(e))
             return {
                 "expense_count": 0,
                 "total_amount": 0.0,
@@ -154,7 +154,7 @@ class DatabaseService:
                 
                 return {row['month']: row['total'] for row in rows}
         except Exception as e:
-            logger.error(f"Error getting monthly data: {str(e)}")
+            logger.error("Error getting monthly data: %s", str(e))
             return {}
 
 # Global instance - simple and effective

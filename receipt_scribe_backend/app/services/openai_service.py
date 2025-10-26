@@ -67,7 +67,7 @@ class OpenAIService:
             
             # Extract and clean the JSON response
             content = response.choices[0].message.content
-            logger.info(f"Raw OpenAI response: {content}")
+            logger.info("Raw OpenAI response: %s", content)
             
             # Parse and validate the response
             extracted_data = json.loads(content)
@@ -86,16 +86,16 @@ class OpenAIService:
                     if "amount" not in item:
                         item["amount"] = 0.0
             
-            logger.info(f"Successfully extracted data from receipt: {extracted_data}")
+            logger.info("Successfully extracted data from receipt: %s", extracted_data)
             return extracted_data
             
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse OpenAI response as JSON: {e}")
-            logger.error(f"Raw response that failed: {content}")
-            raise Exception("Failed to parse receipt data. Please try again with a clearer image.")
+            logger.error("Failed to parse OpenAI response as JSON: %s", e)
+            logger.error("Raw response that failed: %s", content)
+            raise ValueError("Failed to parse receipt data. Please try again with a clearer image.") from e
         except Exception as e:
-            logger.error(f"Error extracting data from image: {str(e)}")
-            raise Exception(f"Failed to process image: {str(e)}")
+            logger.error("Error extracting data from image: %s", str(e))
+            raise RuntimeError(f"Failed to process image: {str(e)}") from e
 
 # Simple global instance
 openai_service = OpenAIService()
